@@ -1,4 +1,6 @@
+import Header from "@/components/common/Header";
 import "./globals.css";
+import Footer from "@/components/common/Footer";
 
 export const metadata = {
   title: "Momnect",
@@ -8,7 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
-      <body>{children}</body>
+      <body>
+        <Header />
+        {children}
+        <Footer />
+      </body>
     </html>
   );
 }
