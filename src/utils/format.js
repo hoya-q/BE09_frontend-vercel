@@ -1,11 +1,12 @@
-// "YYYYMMDD" 형태의 문자열을 Date 객체로 변환
+// "YYYYMMDD" 형태의 문자열을 "YYYY년 MM월 DD일" 문자열로 변환
 export function formatStringToDate(dateString) {
-  const year = parseInt(dateString?.slice(0, 4));
-  const month = parseInt(dateString?.slice(4, 6));
-  const day = parseInt(dateString?.slice(6, 8));
+  if (!dateString || dateString.length !== 8) return "";
 
-  const convertedDate = new Date(year, month - 1, day);
-  return convertedDate;
+  const year = dateString.slice(0, 4);
+  const month = dateString.slice(4, 6);
+  const day = dateString.slice(6, 8);
+
+  return `${year}년 ${month}월 ${day}일`;
 }
 
 // 사용 예시:

@@ -7,8 +7,8 @@ import ModalExample from "./components/ModalExample";
 
 export default function Page() {
   return (
-    <div style={{ padding: "24px", fontFamily: "sans-serif", lineHeight: 1.6, maxWidth: "1200px", margin: "0 auto" }}>
-      <h1>공통 함수, 모달, API 예제</h1>
+    <div className="p-6 font-sans leading-relaxed max-w-7xl w-[850px] mx-auto">
+      <h1 className="text-3xl font-bold mb-6">공통 함수, 모달, API 예제</h1>
 
       <Tabs defaultValue="utils" className="w-full">
         <TabsList className="grid w-full grid-cols-3">

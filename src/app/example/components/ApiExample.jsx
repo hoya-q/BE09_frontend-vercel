@@ -4,13 +4,13 @@ import api from "@/lib/api";
 
 export default function ApiExample() {
   return (
-    <div style={{ padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
-      <h2>🌐 API 사용법 가이드</h2>
+    <div className="w-full p-5 border border-gray-300 rounded-lg">
+      <h2 className="text-2xl font-bold mb-6">🌐 API 사용법 가이드</h2>
 
       {/* API 설정 정보 */}
-      <div style={{ marginBottom: "30px", padding: "15px", backgroundColor: "#e8f5e8", borderRadius: "4px" }}>
-        <h3>⚙️ API 설정 정보</h3>
-        <ul style={{ margin: "0", paddingLeft: "20px" }}>
+      <div className="mb-8 p-4 bg-green-50 rounded-lg">
+        <h3 className="text-lg font-semibold mb-3">⚙️ API 설정 정보</h3>
+        <ul className="list-disc list-inside space-y-1">
           <li>
             <strong>Base URL:</strong> {process.env.NEXT_PUBLIC_API_URL || "http://localhost:5501"}
           </li>
@@ -24,42 +24,24 @@ export default function ApiExample() {
             <strong>인증:</strong> Bearer 토큰 자동 추가 (localStorage의 "token" 키 사용)
           </li>
         </ul>
-        <p style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}>
-          <strong>📁 API 파일:</strong> <code>src/lib/api.js</code> - 이 파일에서 baseURL, headers, 인터셉터 등을 수정할
-          수 있습니다.
+        <p className="mt-3 text-sm text-gray-600">
+          <strong>📁 API 파일:</strong> <code className="bg-gray-100 px-1 rounded">src/lib/api.js</code> - 이 파일에서
+          baseURL, headers, 인터셉터 등을 수정할 수 있습니다.
         </p>
       </div>
 
       {/* API 사용법 설명 */}
-      <div style={{ marginBottom: "30px", padding: "15px", backgroundColor: "#e3f2fd", borderRadius: "4px" }}>
-        <h3>📚 API 사용법</h3>
+      <div className="mb-8 p-4 bg-blue-50 rounded-lg">
+        <h3 className="text-lg font-semibold mb-4">📚 API 사용법</h3>
 
-        <div style={{ marginBottom: "25px" }}>
-          <h4>1️⃣ 공통 API 인스턴스 import</h4>
-          <pre
-            style={{
-              fontSize: "12px",
-              margin: "5px 0",
-              padding: "10px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "4px",
-            }}
-          >
-            {`import api from "@/lib/api";`}
-          </pre>
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-2">1️⃣ 공통 API 인스턴스 import</h4>
+          <pre className="text-xs p-3 bg-gray-50 rounded border overflow-x-auto">{`import api from "@/lib/api";`}</pre>
         </div>
 
-        <div style={{ marginBottom: "25px" }}>
-          <h4>2️⃣ 담당 영역에 맞는 API 호출</h4>
-          <pre
-            style={{
-              fontSize: "12px",
-              margin: "5px 0",
-              padding: "10px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "4px",
-            }}
-          >
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-2">2️⃣ 담당 영역에 맞는 API 호출</h4>
+          <pre className="text-xs p-3 bg-gray-50 rounded border overflow-x-auto">
             {`// 사용자 관련 API 호출 (사용자 담당자)
 const getUsers = () => api.get("/users");
 const getUser = (id) => api.get(\`/users/\${id}\`);
@@ -83,17 +65,9 @@ const deleteReview = (id) => api.delete(\`/reviews/\${id}\`);`}
           </pre>
         </div>
 
-        <div style={{ marginBottom: "25px" }}>
-          <h4>3️⃣ 컴포넌트에서 API 사용</h4>
-          <pre
-            style={{
-              fontSize: "12px",
-              margin: "5px 0",
-              padding: "10px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "4px",
-            }}
-          >
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-2">3️⃣ 컴포넌트에서 API 사용</h4>
+          <pre className="text-xs p-3 bg-gray-50 rounded border overflow-x-auto">
             {`// 컴포넌트 파일에서
 import api from "@/lib/api";
 
@@ -153,17 +127,9 @@ export default function UserPage() {
           </pre>
         </div>
 
-        <div style={{ marginBottom: "25px" }}>
-          <h4>4️⃣ 에러 처리</h4>
-          <pre
-            style={{
-              fontSize: "12px",
-              margin: "5px 0",
-              padding: "10px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "4px",
-            }}
-          >
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-2">4️⃣ 에러 처리</h4>
+          <pre className="text-xs p-3 bg-gray-50 rounded border overflow-x-auto">
             {`try {
   const response = await api.get("/users");
   // 성공 처리
@@ -187,17 +153,9 @@ export default function UserPage() {
           </pre>
         </div>
 
-        <div style={{ marginBottom: "25px" }}>
-          <h4>5️⃣ 고급 사용법</h4>
-          <pre
-            style={{
-              fontSize: "12px",
-              margin: "5px 0",
-              padding: "10px",
-              backgroundColor: "#f8f9fa",
-              borderRadius: "4px",
-            }}
-          >
+        <div className="mb-6">
+          <h4 className="text-md font-semibold mb-2">5️⃣ 고급 사용법</h4>
+          <pre className="text-xs p-3 bg-gray-50 rounded border overflow-x-auto">
             {`// 쿼리 파라미터 사용
 const response = await api.get("/users", { 
   params: { page: 1, limit: 10, search: "홍길동" } 
@@ -223,46 +181,44 @@ console.log(response.headers);  // 응답 헤더`}
       </div>
 
       {/* 팀원별 가이드 */}
-      <div
-        style={{
-          marginBottom: "30px",
-          padding: "15px",
-          backgroundColor: "#fff3cd",
-          borderRadius: "4px",
-          border: "1px solid #ffeaa7",
-        }}
-      >
-        <h3>👥 팀원별 작업 가이드</h3>
+      <div className="mb-8 p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+        <h3 className="text-lg font-semibold mb-4">👥 팀원별 작업 가이드</h3>
 
-        <div style={{ marginBottom: "15px" }}>
-          <h4>📋 각자 담당 영역</h4>
-          <ul style={{ margin: "0", paddingLeft: "20px" }}>
+        <div className="mb-4">
+          <h4 className="text-md font-semibold mb-2">📋 각자 담당 영역</h4>
+          <ul className="list-disc list-inside space-y-1">
             <li>
-              <strong>사용자 담당:</strong> <code>src/app/user/</code> - <code>api.get("/users")</code> 등 사용
+              <strong>사용자 담당:</strong> <code className="bg-gray-100 px-1 rounded">src/app/user/</code> -{" "}
+              <code className="bg-gray-100 px-1 rounded">api.get("/users")</code> 등 사용
             </li>
             <li>
-              <strong>상품 담당:</strong> <code>src/app/product/</code> - <code>api.get("/products")</code> 등 사용
+              <strong>상품 담당:</strong> <code className="bg-gray-100 px-1 rounded">src/app/product/</code> -{" "}
+              <code className="bg-gray-100 px-1 rounded">api.get("/products")</code> 등 사용
             </li>
             <li>
-              <strong>리뷰 담당:</strong> <code>src/app/review/</code> - <code>api.get("/reviews")</code> 등 사용
+              <strong>리뷰 담당:</strong> <code className="bg-gray-100 px-1 rounded">src/app/review/</code> -{" "}
+              <code className="bg-gray-100 px-1 rounded">api.get("/reviews")</code> 등 사용
             </li>
             <li>
-              <strong>게시물 담당:</strong> <code>src/app/post/</code> - <code>api.get("/posts")</code> 등 사용
+              <strong>게시물 담당:</strong> <code className="bg-gray-100 px-1 rounded">src/app/post/</code> -{" "}
+              <code className="bg-gray-100 px-1 rounded">api.get("/posts")</code> 등 사용
             </li>
             <li>
-              <strong>채팅 담당:</strong> <code>src/app/chat/</code> - <code>api.get("/chats")</code> 등 사용
+              <strong>채팅 담당:</strong> <code className="bg-gray-100 px-1 rounded">src/app/chat/</code> -{" "}
+              <code className="bg-gray-100 px-1 rounded">api.get("/chats")</code> 등 사용
             </li>
           </ul>
         </div>
 
-        <div style={{ marginBottom: "15px" }}>
-          <h4>🔧 작업 순서</h4>
-          <ol style={{ margin: "0", paddingLeft: "20px" }}>
+        <div className="mb-4">
+          <h4 className="text-md font-semibold mb-2">🔧 작업 순서</h4>
+          <ol className="list-decimal list-inside space-y-1">
             <li>
-              담당 페이지에서 <code>import api from "@/lib/api";</code> 추가
+              담당 페이지에서 <code className="bg-gray-100 px-1 rounded">import api from "@/lib/api";</code> 추가
             </li>
             <li>
-              담당 영역에 맞는 엔드포인트로 API 호출 (예: <code>api.get("/users")</code>)
+              담당 영역에 맞는 엔드포인트로 API 호출 (예:{" "}
+              <code className="bg-gray-100 px-1 rounded">api.get("/users")</code>)
             </li>
             <li>컴포넌트에서 API 호출하여 데이터 처리</li>
             <li>에러 처리 추가</li>
@@ -271,18 +227,20 @@ console.log(response.headers);  // 응답 헤더`}
       </div>
 
       {/* 주의사항 */}
-      <div style={{ padding: "15px", backgroundColor: "#f8d7da", borderRadius: "4px", border: "1px solid #f5c6cb" }}>
-        <h3>⚠️ 주의사항</h3>
-        <ul style={{ margin: "0", paddingLeft: "20px" }}>
+      <div className="p-4 bg-red-50 rounded-lg border border-red-200">
+        <h3 className="text-lg font-semibold mb-3">⚠️ 주의사항</h3>
+        <ul className="list-disc list-inside space-y-1">
           <li>
             모든 API 요청에는 <strong>try-catch</strong>로 에러 처리를 해주세요
           </li>
           <li>
-            baseURL, headers 등 공통 설정은 <code>src/lib/api.js</code>에서만 수정하세요
+            baseURL, headers 등 공통 설정은 <code className="bg-gray-100 px-1 rounded">src/lib/api.js</code>에서만
+            수정하세요
           </li>
           <li>토큰이 필요한 API는 자동으로 Authorization 헤더가 추가됩니다</li>
           <li>
-            각자 담당 영역의 엔드포인트만 사용하세요 (예: 사용자 담당자는 <code>/users</code> 관련만)
+            각자 담당 영역의 엔드포인트만 사용하세요 (예: 사용자 담당자는{" "}
+            <code className="bg-gray-100 px-1 rounded">/users</code> 관련만)
           </li>
           <li>공통 API 인스턴스를 사용하므로 모든 팀원이 동일한 설정을 공유합니다</li>
         </ul>
