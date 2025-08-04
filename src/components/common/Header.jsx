@@ -128,52 +128,98 @@ export default function Header() {
 
   return (
     <header className="w-full border-b border-[#ddd] relative">
-      <div className="flex justify-center items-center mx-auto gap-10 py-4">
-        <div className="left">
-          <Link href={"/"}>
-            <div className="flex items-center gap-2">
-              <Image src="/header/header-logo.png" width={40} height={40} alt="header-logo.png" />
-              <span className="text-xl font-bold">Momnect</span>
-            </div>
-          </Link>
-        </div>
-        <div className="center">
-          <div className="bg-[#F1F4F6] relative rounded-[6px] w-[612px] h-[44px] px-4 py-[10px]">
-            <input
-              type="text"
-              className="w-full outline-none bg-transparent"
-              placeholder="어떤 육아 용품을 찾고 계신가요?"
-            />
-            <div className="absolute top-[10px] right-[16px] cursor-pointer">
-              <Search />
+      <div className="flex flex-col mx-auto py-4">
+        {/* 첫 번째 줄: 로고, 검색창, 우측 메뉴 */}
+        <div className="flex justify-between items-center mx-auto gap-10 mb-4">
+          <div className="left">
+            <Link href={"/"}>
+              <div className="flex items-center gap-2">
+                <Image src="/header/header-logo.png" width={146} height={146} alt="header-logo.png" />
+              </div>
+            </Link>
+          </div>
+          <div className="center">
+            <div className="bg-[#F1F4F6] relative rounded-[6px] w-[612px] h-[44px] px-4 py-[10px]">
+              <input
+                type="text"
+                className="w-full outline-none bg-transparent"
+                placeholder="어떤 육아 용품을 찾고 계신가요?"
+              />
+              <div className="absolute top-[10px] right-[16px] cursor-pointer">
+                <Search />
+              </div>
             </div>
           </div>
-          <div className="flex justify-center items-center gap-4 pt-4">
-            <ul className="flex gap-4">
-              <li className="flex justify-center items-center relative">
-                <div
-                  className="relative"
-                  onMouseEnter={() => setIsCategoryOpen(true)}
-                  onMouseLeave={() => setIsCategoryOpen(false)}
-                >
-                  <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
-                    <Menu color="#ffffff" />
-                    카테고리
-                  </Button>
+          <div className="right">
+            <div className="min-w-[300px]">
+              <ul className="flex w-full">
+                <li>
+                  <Link href={"#"} className="flex items-center gap-1">
+                    <MessageCircleMore color="#000000" />
+                    <span className="text-sm">채팅하기</span>
+                  </Link>
+                </li>
+                <li className="px-3">|</li>
+                <li>
+                  <Link href={"#"} className="flex items-center gap-1">
+                    <ShoppingBag color="#000000" />
+                    <span className="text-sm">판매하기</span>
+                  </Link>
+                </li>
+                <li className="px-3">|</li>
+                <li>
+                  <Link href={"#"} className="flex items-center gap-1">
+                    <User color="#000000" />
+                    <span className="text-sm">마이</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
-                  {/* 카테고리 드롭다운 메뉴 */}
-                  {isCategoryOpen && (
-                    <div className="absolute top-[60px] left-0 bg-white border border-[#ddd] shadow-lg z-50 rounded-md min-w-[720px] max-h-[500px]">
-                      {/* 호버 브리지 - 버튼과 메뉴 사이 공백을 채워줌 */}
-                      <div className="absolute -top-[60px] left-0 w-full h-[60px] bg-transparent"></div>
-                      <div className="overflow-y-auto max-h-[500px]">
-                        <div className="py-6 px-6">
-                          <div className="grid grid-cols-3 gap-8">
-                            {/* 첫 번째 열 - 출산/육아용품 */}
+        {/* 두 번째 줄: 카테고리 버튼들 */}
+        <div className="flex justify-center items-center gap-4">
+          <ul className="flex gap-4">
+            <li className="flex justify-center items-center relative">
+              <div
+                className="relative"
+                onMouseEnter={() => setIsCategoryOpen(true)}
+                onMouseLeave={() => setIsCategoryOpen(false)}
+              >
+                <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
+                  <Menu color="#ffffff" />
+                  카테고리
+                </Button>
+
+                {/* 카테고리 드롭다운 메뉴 */}
+                {isCategoryOpen && (
+                  <div className="absolute top-[60px] left-0 bg-white border border-[#ddd] shadow-lg z-50 rounded-md min-w-[720px] max-h-[500px]">
+                    {/* 호버 브리지 - 버튼과 메뉴 사이 공백을 채워줌 */}
+                    <div className="absolute -top-[60px] left-0 w-full h-[60px] bg-transparent"></div>
+                    <div className="overflow-y-auto max-h-[500px]">
+                      <div className="py-6 px-6">
+                        <div className="grid grid-cols-3 gap-8">
+                          {/* 첫 번째 열 - 출산/육아용품 */}
+                          <div>
+                            <h3 className="font-bold text-lg mb-4 text-gray-800">출산/육아용품</h3>
+                            <ul className="space-y-2">
+                              {categoryData["출산/육아용품"].map((item, index) => (
+                                <li key={index}>
+                                  <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
+                                    {item}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          {/* 두 번째 열 - 유아동의류 & 유아동잡화 */}
+                          <div className="space-y-6">
                             <div>
-                              <h3 className="font-bold text-lg mb-4 text-gray-800">출산/육아용품</h3>
+                              <h3 className="font-bold text-lg mb-4 text-gray-800">유아동의류</h3>
                               <ul className="space-y-2">
-                                {categoryData["출산/육아용품"].map((item, index) => (
+                                {categoryData["유아동의류"].map((item, index) => (
                                   <li key={index}>
                                     <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
                                       {item}
@@ -182,120 +228,78 @@ export default function Header() {
                                 ))}
                               </ul>
                             </div>
-
-                            {/* 두 번째 열 - 유아동의류 & 유아동잡화 */}
-                            <div className="space-y-6">
-                              <div>
-                                <h3 className="font-bold text-lg mb-4 text-gray-800">유아동의류</h3>
-                                <ul className="space-y-2">
-                                  {categoryData["유아동의류"].map((item, index) => (
-                                    <li key={index}>
-                                      <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
-                                        {item}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                              <div>
-                                <h3 className="font-bold text-lg mb-4 text-gray-800">유아동잡화</h3>
-                                <ul className="space-y-2">
-                                  {categoryData["유아동잡화"].map((item, index) => (
-                                    <li key={index}>
-                                      <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
-                                        {item}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
+                            <div>
+                              <h3 className="font-bold text-lg mb-4 text-gray-800">유아동잡화</h3>
+                              <ul className="space-y-2">
+                                {categoryData["유아동잡화"].map((item, index) => (
+                                  <li key={index}>
+                                    <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
+                                      {item}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
                             </div>
+                          </div>
 
-                            {/* 세 번째 열 - 유아동교구/완구 & 기타 */}
-                            <div className="space-y-6">
-                              <div>
-                                <h3 className="font-bold text-lg mb-4 text-gray-800">유아동교구/완구</h3>
-                                <ul className="space-y-2">
-                                  {categoryData["유아동교구/완구"].map((item, index) => (
-                                    <li key={index}>
-                                      <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
-                                        {item}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                              <div>
-                                <h3 className="font-bold text-lg mb-4 text-gray-800">기타 유아동 물품</h3>
-                              </div>
+                          {/* 세 번째 열 - 유아동교구/완구 & 기타 */}
+                          <div className="space-y-6">
+                            <div>
+                              <h3 className="font-bold text-lg mb-4 text-gray-800">유아동교구/완구</h3>
+                              <ul className="space-y-2">
+                                {categoryData["유아동교구/완구"].map((item, index) => (
+                                  <li key={index}>
+                                    <Link href="#" className="text-gray-600 hover:text-gray-800 text-sm">
+                                      {item}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                            <div>
+                              <h3 className="font-bold text-lg mb-4 text-gray-800">기타 유아동 물품</h3>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  )}
-                </div>
-              </li>
-              <li className="flex justify-center items-center">
-                <Link href={"#"}>
-                  <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
-                    <Heart color="#ffffff" fill="#ffffff" />
-                    찜한상품
-                  </Button>
-                </Link>
-              </li>
-              <li className="flex justify-center items-center">
-                <Link href={"#"}>
-                  <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
-                    <Image src={"/header/tabler_bulb.png"} width={24} height={24} alt="육아꿀팁" />
-                    육아꿀팁
-                  </Button>
-                </Link>
-              </li>
-              <li className="flex justify-center items-center">
-                <Link href={"#"}>
-                  <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
-                    <Image src={"/header/shopping-bag.png"} width={18} height={18} alt="공동구매" />
-                    공동구매
-                  </Button>
-                </Link>
-              </li>
-              <li className="flex justify-center items-center">
-                <Link href={"#"}>
-                  <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
-                    <Image src={"/header/fluent-mdl2_special-event.png"} width={18} height={18} alt="이벤트" />
-                    이벤트
-                  </Button>
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div className="right">
-          <div className="min-w-[300px]">
-            <ul className="flex w-full">
-              <li>
-                <Link href={"#"} className="flex items-center gap-1">
-                  <MessageCircleMore color="#000000" />
-                  <span className="text-sm">채팅하기</span>
-                </Link>
-              </li>
-              <li className="px-3">|</li>
-              <li>
-                <Link href={"#"} className="flex items-center gap-1">
-                  <ShoppingBag color="#000000" />
-                  <span className="text-sm">판매하기</span>
-                </Link>
-              </li>
-              <li className="px-3">|</li>
-              <li>
-                <Link href={"#"} className="flex items-center gap-1">
-                  <User color="#000000" />
-                  <span className="text-sm">마이</span>
-                </Link>
-              </li>
-            </ul>
-          </div>
+                  </div>
+                )}
+              </div>
+            </li>
+            <li className="flex justify-center items-center">
+              <Link href={"#"}>
+                <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
+                  <Heart color="#ffffff" fill="#ffffff" />
+                  찜한상품
+                </Button>
+              </Link>
+            </li>
+            <li className="flex justify-center items-center">
+              <Link href={"#"}>
+                <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
+                  <Image src={"/header/tabler_bulb.png"} width={24} height={24} alt="육아꿀팁" />
+                  육아꿀팁
+                </Button>
+              </Link>
+            </li>
+            <li className="flex justify-center items-center">
+              <Link href={"#"}>
+                <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
+                  <Image src={"/header/shopping-bag.png"} width={18} height={18} alt="공동구매" />
+                  공동구매
+                </Button>
+              </Link>
+            </li>
+            <li className="flex justify-center items-center">
+              <Link href={"#"}>
+                <Button className="bg-[#85B3EB] hover:bg-[#65A2EE] w-[110px] h-[44px]">
+                  <Image src={"/header/fluent-mdl2_special-event.png"} width={18} height={18} alt="이벤트" />
+                  이벤트
+                </Button>
+              </Link>
+            </li>
+          </ul>
         </div>
       </div>
     </header>
