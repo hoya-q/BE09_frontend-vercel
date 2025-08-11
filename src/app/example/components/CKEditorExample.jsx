@@ -1,15 +1,24 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import dynamic from "next/dynamic";
 import "./css/editor.css";
+
+// CKEditor를 동적으로 import하여 SSR 문제 해결
+const CKEditor = dynamic(() => import("@ckeditor/ckeditor5-react").then((mod) => mod.CKEditor), { ssr: false });
+
+const ClassicEditor = dynamic(() => import("@ckeditor/ckeditor5-build-classic"), { ssr: false });
 
 export default function CKEditorExample() {
   const [editorData, setEditorData] = useState("<p>기본 에디터 내용입니다.</p>");
   const [customEditorData, setCustomEditorData] = useState("<p>커스텀 에디터 내용입니다.</p>");
   const [readOnlyData, setReadOnlyData] = useState("<p>읽기 전용 에디터입니다. 편집할 수 없습니다.</p>");
   const [outputData, setOutputData] = useState("");
+  const [isEditorLoaded, setIsEditorLoaded] = useState(false);
+
+  useEffect(() => {
+    setIsEditorLoaded(true);
+  }, []);
 
   // 기본 에디터 설정 (수정된 구성)
   const editorConfiguration = {
@@ -89,6 +98,19 @@ export default function CKEditorExample() {
       reader.readAsDataURL(file);
     });
   };
+
+  if (!isEditorLoaded) {
+    return (
+      <div className="space-y-8">
+        <div className="border rounded-lg p-6">
+          <h3 className="text-lg font-semibold mb-4">📝 CKEditor 로딩 중...</h3>
+          <div className="flex items-center justify-center h-32">
+            <div className="text-gray-500">에디터를 불러오는 중입니다...</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
