@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import ProductCard from '../../../components/common/ProductCard';
 import './search.css';
 
@@ -11,6 +12,10 @@ export default function Page() {
     const [selectedOptions, setSelectedOptions] = useState(['판매완료 상품 제외', '새상품', '중고']);
     const [sortBy, setSortBy] = useState('추천순');
     const [isFromCategory, setIsFromCategory] = useState(true);
+
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    const pathname = usePathname();
 
     // 카테고리 관련 상태
     const [categoryPath, setCategoryPath] = useState(['전체']);
@@ -37,9 +42,8 @@ export default function Page() {
 
     // URL 파라미터 확인
     useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const category = urlParams.get('category');
-        const keyword = urlParams.get('keyword');
+        const category = searchParams.get('category');
+        const keyword = searchParams.get('keyword');
 
         if (category) {
             // 카테고리로 들어온 경우: /search?category=3
@@ -52,6 +56,10 @@ export default function Page() {
                 setCategoryPath(['전체', ...categoryPath]);
                 setSelectedCategory(categoryPath[categoryPath.length - 1]);
                 setSearchQuery(categoryPath[categoryPath.length - 1]);
+            } else {
+                // category 파라미터가 사라진 경우 초기화
+                setCategoryPath(['전체']);
+                setSelectedCategory(null);
             }
         }
 
@@ -59,8 +67,11 @@ export default function Page() {
             // 검색어로 들어온 경우: /search?keyword=유모차
             setIsFromCategory(false);
             setSearchQuery(decodeURIComponent(keyword));
+        } else {
+            // keyword 파라미터가 사라지면 빈값
+            setSearchQuery('');
         }
-    }, []);
+    }, [searchParams]);
 
     // 카테고리 확장/축소 토글 함수
     const toggleCategoryExpansion = () => {
@@ -74,30 +85,6 @@ export default function Page() {
             name: '출산/육아용품',
             parentId: null,
             children: [
-                {
-                    id: 101,
-                    name: '모유수유용품',
-                    parentId: 1,
-                    children: [
-                        { id: 1011, name: '유축기', parentId: 101, children: [] },
-                        {
-                            id: 1012,
-                            name: '수유패드',
-                            parentId: 101,
-                            children: [
-                                {
-                                    id: 1013,
-                                    name: '수유쿠션',
-                                    parentId: 1012,
-                                    children: [
-                                        { id: 1014, name: '모유 저장팩/병', parentId: 1013, children: [] },
-                                        { id: 1015, name: '젖병 세척용품', parentId: 1013, children: [] },
-                                    ],
-                                },
-                            ],
-                        },
-                    ],
-                },
                 { id: 102, name: '분유수유용품', parentId: 1, children: [] },
                 { id: 103, name: '튼살크림/스킨케어', parentId: 1, children: [] },
                 { id: 104, name: '임부복/수유복/언더웨어', parentId: 1, children: [] },
@@ -170,7 +157,7 @@ export default function Page() {
 
     // 현재 표시할 카테고리 찾기
     const getCurrentCategory = () => {
-        if (categoryPath.length === 1) return null; // 메인 카테고리 뷰
+        if (categoryPath.length === 1) return null; // 전체만 있는 경우
 
         // 동적으로 경로를 따라가면서 현재 카테고리 찾기
         let currentCategory = babyCategoryTree.find((cat) => cat.name === categoryPath[1]);
@@ -186,7 +173,7 @@ export default function Page() {
         return currentCategory;
     };
 
-    // 카테고리 클릭 핸들러
+    // 카테고리 클릭 시 경로/URL 업데이트
     const handleCategoryClick = (categoryName) => {
         let clickedCategory;
 
@@ -206,24 +193,22 @@ export default function Page() {
 
         // URL 업데이트 - 현재 검색어 유지하면서 카테고리 추가
         if (clickedCategory) {
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.set('category', clickedCategory.id.toString());
-            const newUrl = `/product/search?${urlParams.toString()}`;
-            window.history.pushState({}, '', newUrl);
+            const params = new URLSearchParams(searchParams);
+            params.set('category', clickedCategory.id.toString());
+            router.push(`${pathname}?${params.toString()}`);
         }
     };
 
-    // 브레드크럼 클릭 핸들러
+    // 브레드크럼 클릭 시 경로/URL 업데이트
     const handleBreadcrumbClick = (index) => {
         if (index === 0) {
             // "전체" 클릭 시 메인으로 돌아가기
             setCategoryPath(['전체']);
             setSelectedCategory(null);
             // URL에서 카테고리 파라미터 제거
-            const urlParams = new URLSearchParams(window.location.search);
-            urlParams.delete('category');
-            const newUrl = `/product/search?${urlParams.toString()}`;
-            window.history.pushState({}, '', newUrl);
+            const params = new URLSearchParams(searchParams);
+            params.delete('category');
+            router.push(`${pathname}?${params.toString()}`);
         } else {
             // 해당 인덱스까지만 경로 유지
             const newPath = categoryPath.slice(0, index + 1);
@@ -254,10 +239,9 @@ export default function Page() {
             }
 
             if (targetCategory) {
-                const urlParams = new URLSearchParams(window.location.search);
-                urlParams.set('category', targetCategory.id.toString());
-                const newUrl = `/product/search?${urlParams.toString()}`;
-                window.history.pushState({}, '', newUrl);
+                const params = new URLSearchParams(searchParams);
+                params.set('category', targetCategory.id.toString());
+                router.push(`${pathname}?${params.toString()}`);
             }
         }
     };
@@ -277,6 +261,7 @@ export default function Page() {
         showReviewButton: false,
     }));
 
+    // 필터 토글 핸들러
     const toggleAgeGroup = (age) => {
         setSelectedAgeGroups((prev) => (prev.includes(age) ? prev.filter((a) => a !== age) : [...prev, age]));
     };
@@ -365,46 +350,48 @@ export default function Page() {
                 </div>
 
                 {/* 세부 카테고리 */}
-                {isCategoryExpanded && (
-                    <div className='search-filter-section expanded'>
-                        <div className='search-filter-header'>
-                            <div className='search-filter-placeholder'></div>
-                        </div>
-                        <div className='search-filter-content'>
-                            <div className='search-category-grid'>
-                                {categoryPath.length === 1 ? (
-                                    // 메인 카테고리 뷰
-                                    babyCategoryTree.map((category) => (
-                                        <div key={category.id} className='search-category-item'>
-                                            <span
-                                                className={selectedCategory === category.name ? 'selected' : ''}
-                                                onClick={() => handleCategoryClick(category.name)}
-                                            >
-                                                {category.name}
-                                            </span>
-                                        </div>
-                                    ))
-                                ) : (
-                                    // 서브 카테고리 뷰
-                                    <div className='search-sub-categories-container'>
-                                        {getCurrentCategory()?.children?.map((subCategory) => (
-                                            <div key={subCategory.id} className='search-category-item'>
+                {isCategoryExpanded &&
+                    ((categoryPath.length === 1 && babyCategoryTree.length > 0) ||
+                        (categoryPath.length > 1 && getCurrentCategory()?.children?.length > 0)) && (
+                        <div className='search-filter-section expanded'>
+                            <div className='search-filter-header'>
+                                <div className='search-filter-placeholder'></div>
+                            </div>
+                            <div className='search-filter-content'>
+                                <div className='search-category-grid'>
+                                    {categoryPath.length === 1 ? (
+                                        // 메인 카테고리 뷰
+                                        babyCategoryTree.map((category) => (
+                                            <div key={category.id} className='search-category-item'>
                                                 <span
-                                                    className={`search-sub-category-item ${
-                                                        selectedCategory === subCategory.name ? 'selected' : ''
-                                                    }`}
-                                                    onClick={() => handleCategoryClick(subCategory.name)}
+                                                    className={selectedCategory === category.name ? 'selected' : ''}
+                                                    onClick={() => handleCategoryClick(category.name)}
                                                 >
-                                                    {subCategory.name}
+                                                    {category.name}
                                                 </span>
                                             </div>
-                                        ))}
-                                    </div>
-                                )}
+                                        ))
+                                    ) : (
+                                        // 서브 카테고리 뷰
+                                        <div className='search-sub-categories-container'>
+                                            {getCurrentCategory()?.children?.map((subCategory) => (
+                                                <div key={subCategory.id} className='search-category-item'>
+                                                    <span
+                                                        className={`search-sub-category-item ${
+                                                            selectedCategory === subCategory.name ? 'selected' : ''
+                                                        }`}
+                                                        onClick={() => handleCategoryClick(subCategory.name)}
+                                                    >
+                                                        {subCategory.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                )}
+                    )}
 
                 {/* 연령대 필터 */}
                 <div className='search-filter-section'>
@@ -414,15 +401,12 @@ export default function Page() {
                     <div className='search-filter-content'>
                         <div className='search-checkbox-group'>
                             {['0~6개월', '6~12개월', '1~2세', '2~4세', '4~6세', '6~8세', '8세 이상'].map((age) => (
-                                <label key={age} className='search-checkbox-item' onClick={() => toggleAgeGroup(age)}>
-                                    <img
-                                        src={
-                                            selectedAgeGroups.includes(age)
-                                                ? '/images/product/checkbox-marked.svg'
-                                                : '/images/product/checkbox-blank.svg'
-                                        }
-                                        alt='checkbox'
-                                        className='search-checkbox-icon'
+                                <label key={age} className='search-checkbox-item'>
+                                    <input
+                                        type='checkbox'
+                                        checked={selectedAgeGroups.includes(age)}
+                                        onChange={() => toggleAgeGroup(age)}
+                                        className='search-checkbox-input'
                                     />
                                     <span className='search-checkbox-text'>{age}</span>
                                 </label>
@@ -480,19 +464,12 @@ export default function Page() {
                     <div className='search-filter-content'>
                         <div className='search-checkbox-group'>
                             {['판매완료 상품 제외', '새상품', '중고'].map((option) => (
-                                <label
-                                    key={option}
-                                    className='search-checkbox-item'
-                                    onClick={() => toggleOption(option)}
-                                >
-                                    <img
-                                        src={
-                                            selectedOptions.includes(option)
-                                                ? '/images/product/checkbox-marked.svg'
-                                                : '/images/product/checkbox-blank.svg'
-                                        }
-                                        alt='checkbox'
-                                        className='search-checkbox-icon'
+                                <label key={option} className='search-checkbox-item'>
+                                    <input
+                                        type='checkbox'
+                                        checked={selectedOptions.includes(option)}
+                                        onChange={() => toggleOption(option)}
+                                        className='search-checkbox-input'
                                     />
                                     <span className='search-checkbox-text'>{option}</span>
                                 </label>

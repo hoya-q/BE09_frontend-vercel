@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { savePost, formatDate } from "../lib/postStorage";
@@ -8,12 +8,14 @@ import { savePost, formatDate } from "../lib/postStorage";
 // 형제 폴더의 에디터
 const Editor = dynamic(() => import("../components/Editor"), { ssr: false });
 
-function PostWriteContent() {
+export default function PostWritePage() {
   const router = useRouter();
   const sp = useSearchParams();
   const backTab = sp.get("tab") === "groupbuy" ? "groupbuy" : "tips";
 
-  const [category, setCategory] = useState(backTab === "groupbuy" ? "공동구매" : "육아 꿀팁");
+  const [category, setCategory] = useState(
+    backTab === "groupbuy" ? "공동구매" : "육아 꿀팁"
+  );
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [people, setPeople] = useState(2);
@@ -36,7 +38,10 @@ function PostWriteContent() {
       content,
     };
 
-    const post = category === "공동구매" ? { ...base, status: "모집중", region: "", people } : base;
+    const post =
+      category === "공동구매"
+        ? { ...base, status: "모집중", region: "", people: Number(people) }
+        : base;
 
     savePost(post);
     alert("작성되었습니다!");
@@ -45,8 +50,22 @@ function PostWriteContent() {
 
   return (
     <div className="w-full max-w-5xl mx-auto p-6">
+      {/* CKEditor 입력영역 높이 고정 (전역 적용) */}
+      <style jsx global>{`
+        /* 에디터 입력영역 높이를 고정하고, 내용이 넘치면 스크롤 */
+        .ck-editor__editable {
+          min-height: 400px !important;
+          max-height: 400px !important;
+          overflow-y: auto !important;
+        }
+        /* 에디터 전체 컨테이너도 높이 튀지 않게 */
+        .ck.ck-editor {
+          width: 100%;
+        }
+      `}</style>
+
       <form onSubmit={onSubmit} className="space-y-5">
-        {/* 카테고리: 좌우정렬 */}
+        {/* 카테고리 */}
         <div className="flex items-center gap-3">
           <label className="text-gray-700 text-sm w-16">카테고리</label>
           <select
@@ -59,7 +78,7 @@ function PostWriteContent() {
           </select>
         </div>
 
-        {/* 제목: 좌우정렬 + 공동구매 옵션 */}
+        {/* 제목 + 공동구매 옵션 */}
         <div className="flex items-center gap-3">
           <label className="text-gray-700 text-sm w-16">제목</label>
           <input
@@ -71,7 +90,9 @@ function PostWriteContent() {
 
           {category === "공동구매" && (
             <div className="flex items-center gap-3 ml-auto">
-              <span className="hidden sm:inline text-[12px] text-gray-500">공동 구매지역 선택은 필수입니다.</span>
+              <span className="hidden sm:inline text-[12px] text-gray-500">
+                공동 구매지역 선택은 필수입니다.
+              </span>
 
               <div className="flex items-center gap-1 text-[12px]">
                 <span className="text-gray-700">참여 인원</span>
@@ -99,14 +120,18 @@ function PostWriteContent() {
           )}
         </div>
 
-        {/* 에디터 */}
+        {/* 에디터 (고정 높이) */}
         <div className="border rounded-sm">
           <Editor value={content} onChange={setContent} />
         </div>
 
         {/* 하단 버튼 */}
         <div className="flex justify-center gap-6 pt-4">
-          <button type="button" onClick={onCancel} className="h-9 w-28 rounded border text-sm hover:bg-gray-50">
+          <button
+            type="button"
+            onClick={onCancel}
+            className="h-9 w-28 rounded border text-sm hover:bg-gray-50"
+          >
             취소
           </button>
           <button
@@ -119,13 +144,5 @@ function PostWriteContent() {
         </div>
       </form>
     </div>
-  );
-}
-
-export default function PostWritePage() {
-  return (
-    <Suspense fallback={<div className="w-full max-w-5xl mx-auto p-6">로딩 중...</div>}>
-      <PostWriteContent />
-    </Suspense>
   );
 }

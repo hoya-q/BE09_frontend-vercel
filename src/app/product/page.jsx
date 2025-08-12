@@ -2,6 +2,7 @@
 import ProductCard from '@/components/common/ProductCard';
 import WishlistSidebar from '@/components/common/WishlistSidebar';
 import { Button } from '@/components/ui/button';
+import AddressSearch from './components/AddressSearch';
 import Link from 'next/link';
 
 export default function Page() {
@@ -17,7 +18,7 @@ export default function Page() {
         trade_status: 'SOLD', // ON_SALE(판매중), RESERVED(예약중), ON_HOLD(판매보류), SOLD(판매완료)
         status: 'USED', // NEW(새상품), USED(중고)
         hasWrittenReview: false,
-        showReviewButton: false,
+        showReviewButton: true,
     };
 
     // size 설명:
@@ -27,10 +28,15 @@ export default function Page() {
 
     return (
         <div>
+            <div>여백</div>
+
+            {/* 주소 검색 컴포넌트 예시 */}
+            <AddressSearch />
             {/* 찜한 상품 열기 - trigger안에 디자인된 버튼이나 링크 요소를 넣어서 클릭하면 찜한 상품 페이지가 열림 */}
             <WishlistSidebar trigger={<Button>찜한 상품</Button>} />
 
             {/* 상품 카드 - product 예시는 위에 있음 */}
+            <ProductCard product={product} size='size1' />
             <ProductCard product={product} size='size0' />
 
             {/* Product Detail Page Link */}
