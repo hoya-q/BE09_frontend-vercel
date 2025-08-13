@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import './UserReviewList.css';
+import '../css/UserReviewList.css';
 
 const reviews = [
     { title: '오리 뽁뽁이', date: '2000년 00월 00일', img: 'https://asset.m-gs.kr/prod/1079743862/1/550', rating: 5 },
@@ -12,13 +12,13 @@ const reviews = [
 const UserReviewList = ({ onClose, open }) => {
     const [isClosing, setIsClosing] = useState(false);
 
-    useEffect(() => {
-        const handleEsc = (e) => {
-            if (e.key === "Escape") handleClose();
-        };
-        document.addEventListener("keydown", handleEsc);
-        return () => document.removeEventListener("keydown", handleEsc);
-    }, []);
+    // useEffect(() => {
+    //     const handleEsc = (e) => {
+    //         if (e.key === "Escape") handleClose();
+    //     };
+    //     document.addEventListener("keydown", handleEsc);
+    //     return () => document.removeEventListener("keydown", handleEsc);
+    // }, []);
 
     const handleClose = () => {
         setIsClosing(true);
@@ -28,7 +28,6 @@ const UserReviewList = ({ onClose, open }) => {
         }, 300);
     };
 
-    // ✅ Hook 실행 후 조건부 렌더링
     if (!open && !isClosing) {
         return null;
     };
