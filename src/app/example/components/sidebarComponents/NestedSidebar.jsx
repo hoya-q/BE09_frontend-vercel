@@ -106,6 +106,7 @@ export function NestedSidebar({ onBack }) {
 
           {/* 메인 사이드바 */}
           <Sidebar
+            sidebarKey="main-project-settings"
             title="프로젝트 설정"
             trigger={
               <Button variant="outline" className="border-indigo-200 text-indigo-700 hover:bg-indigo-50">
@@ -149,6 +150,7 @@ export function NestedSidebar({ onBack }) {
 
                 {/* 서브 사이드바 */}
                 <Sidebar
+                  sidebarKey="advanced-project-settings"
                   title="고급 설정"
                   trigger={
                     <Button

@@ -31,8 +31,8 @@ export default function Sidebar({
         open={isOpen}
         onOpenChange={(val) => {
           if (val) {
-            closeAll(); // 모든 사이드바 닫고
-            open(); // 이 사이드바만 열기
+            // 중첩 사이드바를 지원하기 위해 closeAll 대신 현재 사이드바만 열기
+            open();
           } else {
             close();
           }
